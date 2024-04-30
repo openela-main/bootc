@@ -1,8 +1,8 @@
 %bcond_without check
 
 Name:           bootc
-Version:        0.1.7
-Release:        1%{?dist}
+Version:        0.1.9
+Release:        3%{?dist}
 Summary:        Bootable container system
 
 # Apache-2.0
@@ -17,6 +17,8 @@ License:        Apache-2.0 AND BSD-3-Clause AND MIT AND (Apache-2.0 OR BSL-1.0) 
 URL:            https://github.com/containers/bootc
 Source0:        %{url}/releases/download/v%{version}/bootc-%{version}.tar.zstd
 Source1:        %{url}/releases/download/v%{version}/bootc-%{version}-vendor.tar.zstd
+
+Patch0: 0001-Add-a-rollback-verb-and-rollbackQueued-status.patch
 
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch:    %{ix86}
@@ -75,11 +77,16 @@ Recommends: bootupd
 %doc README.md
 %{_bindir}/bootc
 %{_prefix}/lib/bootc/
+%{_prefix}/lib/systemd/system-generators/*
 %{_unitdir}/*
 %{_mandir}/man*/bootc*
 
 
 %changelog
+* Thu Mar 28 2024 Colin Walters <walters@verbum.org> - 0.1.9-3
+- Backport rollback
+  Resolves: #RHEL-30879
+
 * Wed Feb 14 2024 Colin Walters <walters@verbum.org> - 0.1.7-4
 - https://github.com/containers/bootc/releases/tag/v0.1.7
 
