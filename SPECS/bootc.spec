@@ -1,7 +1,7 @@
 %bcond_without check
 
 Name:           bootc
-Version:        0.1.14
+Version:        0.1.15
 Release:        1%{?dist}
 Summary:        Bootable container system
 
@@ -25,6 +25,7 @@ BuildRequires: libzstd-devel
 BuildRequires: make
 BuildRequires: ostree-devel
 BuildRequires: openssl-devel
+BuildRequires: libzstd-devel
 %if 0%{?rhel}
 BuildRequires: rust-toolset
 %else
@@ -82,13 +83,40 @@ Recommends: bootupd
 
 
 %changelog
-* Mon Jul 29 2024 Joseph Marrero <jmarrero@fedoraproject.org> - 0.1.14-1
+* Fri Aug 16 2024 Colin Walters <walters@verbum.org> - 0.1.15-1
+- Update to 0.1.15
+  Resolves: #RHEL-50625
+
+* Thu Jul 25 2024 Joseph Marrero <jmarrero@fedoraproject.org> - 0.1.14-1
 - Update to 0.1.14
-  Resolves: #RHEL-50683, #RHEL-50684, #RHEL-50685
+  Resolves: #RHEL-50625, #RHEL-45325, #RHEL-36003
+
+* Fri Jun 28 2024 Colin Walters <walters@verbum.org> - 0.1.13-2
+- Update to 0.1.13
+
+* Tue Jun 25 2024 Colin Walters <walters@verbum.org> - 0.1.12-3
+- Update to 0.1.12
+
+* Wed May 15 2024 Colin Walters <walters@verbum.org> - 0.1.11-2
+- Update to 0.1.11
+
+* Fri Apr 26 2024 Colin Walters <walters@verbum.org> - 0.1.10-2
+- Release 0.1.10
+
+* Mon Apr 08 2024 Colin Walters <walters@verbum.org> - 0.1.9-4
+- Correct JIRA link
+  Resolves: #RHEL-30878
 
 * Thu Mar 28 2024 Colin Walters <walters@verbum.org> - 0.1.9-3
 - Backport rollback
-  Resolves: #RHEL-30879
+  Related: #RHEL-30466
+
+* Wed Mar 27 2024 Colin Walters <walters@verbum.org> - 0.1.9-2
+- https://github.com/containers/bootc/releases/tag/v0.1.9
+  Resolves: #RHEL-30466
+
+* Tue Mar 19 2024 Colin Walters <walters@verbum.org> - 0.1.8-2
+- https://github.com/containers/bootc/releases/tag/v0.1.8
 
 * Wed Feb 14 2024 Colin Walters <walters@verbum.org> - 0.1.7-4
 - https://github.com/containers/bootc/releases/tag/v0.1.7
