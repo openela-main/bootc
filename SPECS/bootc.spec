@@ -1,7 +1,7 @@
 %bcond_without check
 
 Name:           bootc
-Version:        0.1.15
+Version:        1.1.0
 Release:        1%{?dist}
 Summary:        Bootable container system
 
@@ -83,6 +83,10 @@ Recommends: bootupd
 
 
 %changelog
+* Thu Oct 17 2024 Joseph Marrero <jmarrero@fedoraproject.org> - 1.1.0-1
+- Update to 1.1.0
+  Resolves: #RHEL-62891
+
 * Fri Aug 16 2024 Colin Walters <walters@verbum.org> - 0.1.15-1
 - Update to 0.1.15
   Resolves: #RHEL-50625
