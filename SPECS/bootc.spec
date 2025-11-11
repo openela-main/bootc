@@ -13,7 +13,7 @@
 
 Name:           bootc
 Version:        1.8.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Bootable container system
 
 # Apache-2.0
@@ -153,6 +153,10 @@ chmod +x %{?buildroot}/%{system_reinstall_bootc_install_podman_path}
 %{system_reinstall_bootc_install_podman_path}
 
 %changelog
+* Wed Sep 10 2025 Joseph Marrero <jmarrero@fedoraproject.org> - 1.8.0-3
+- Bump release as rhpkg needed an update to tag for 9.7.z
+  Resolves: #RHEL-113361
+
 * Fri Sep 05 2025 Colin Walters <walters@verbum.org> - 1.8.0-2
 - Update to 1.8.0
 
