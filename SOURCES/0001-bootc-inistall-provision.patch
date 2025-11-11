@@ -1,0 +1,14 @@
+diff --git i/tmt/tests/bootc-install-provision.sh w/tmt/tests/bootc-install-provision.sh
+index 6c9968c..c617d5e 100755
+--- i/tmt/tests/bootc-install-provision.sh
++++ w/tmt/tests/bootc-install-provision.sh
+@@ -50,7 +50,8 @@ if [ "$TMT_REBOOT_COUNT" -eq 0 ]; then
+     fi
+ 
+     # Some rhts-*, rstrnt-* and tmt-* commands are in /usr/local/bin
+-    cp -r /usr/local/bin "$BOOTC_TEMPDIR"
++    cp -r /var/lib/tmt/scripts "$BOOTC_TEMPDIR/bin"
++    ls -al "$BOOTC_TEMPDIR/bin"
+ 
+     # Check image building folder content
+     ls -al "$BOOTC_TEMPDIR"

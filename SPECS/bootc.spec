@@ -1,5 +1,5 @@
 %bcond_without check
-%if 0%{?rhel} >= 10 || 0%{?fedora} > 41
+%if 0%{?rhel} >= 9 || 0%{?fedora} > 41
     %bcond_without ostree_ext
 %else
     %bcond_with ostree_ext
@@ -12,8 +12,8 @@
 %endif
 
 Name:           bootc
-Version:        1.1.6
-Release:        3%{?dist}
+Version:        1.8.0
+Release:        2%{?dist}
 Summary:        Bootable container system
 
 # Apache-2.0
@@ -29,7 +29,10 @@ URL:            https://github.com/containers/bootc
 Source0:        %{url}/releases/download/v%{version}/bootc-%{version}.tar.zstd
 Source1:        %{url}/releases/download/v%{version}/bootc-%{version}-vendor.tar.zstd
 
-Patch0: 0001-store-Really-remove-empty-etc-resolv.conf-and-etc-ho.patch
+# Don't remove, downstream patch only
+# Patch for integration test RHEL 9.x and 10.x support
+Patch0: 0000-bootc-inistall-provision.patch
+Patch1: 0001-bootc-inistall-provision.patch
 
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch:    %{ix86}
@@ -150,6 +153,29 @@ chmod +x %{?buildroot}/%{system_reinstall_bootc_install_podman_path}
 %{system_reinstall_bootc_install_podman_path}
 
 %changelog
+* Fri Sep 05 2025 Colin Walters <walters@verbum.org> - 1.8.0-2
+- Update to 1.8.0
+
+* Thu Aug 21 2025 Joseph Marrero <jmarrero@fedoraproject.org> - 1.7.0-1
+- Update to 1.7.0
+- Resolves: #RHEL-109555
+
+* Fri Jul 22 2025 Gursewak Mangat <gurssing@redhat.com> - 1.5.1-1
+- Update to 1.5.1
+- Resolves: #RHEL-104335
+
+* Fri Jul 11 2025 Gursewak Mangat <gurssing@redhat.com> - 1.4.0-1
+- Update to 1.4.0
+- Resolves: #RHEL-103125
+
+* Fri May 30 2025 Joseph Marrero <jmarrero@fedoraproject.org> - 1.3.0-1
+- Update to 1.3.0
+- Resolves: #RHEL-94597
+
+* Tue Apr 15 2025 John Eckersberg <jeckersb@redhat.com> - 1.1.7-1
+- Update to 1.1.7
+- Resolves: #RHEL-87207
+
 * Thu Mar 06 2025 Joseph Marrero <jmarrero@fedoraproject.org> - 1.1.6-3
 - Backport https://github.com/containers/bootc/pull/1167
 - Resolves: #RHEL-82293
