@@ -1,8 +1,8 @@
 diff --git i/tmt/tests/bootc-install-provision.sh w/tmt/tests/bootc-install-provision.sh
-index c4c884b..29df30c 100755
+index ca8f82dc..94f7819f 100755
 --- i/tmt/tests/bootc-install-provision.sh
 +++ w/tmt/tests/bootc-install-provision.sh
-@@ -4,6 +4,8 @@ set -exuo pipefail
+@@ -9,6 +9,8 @@ set -exuo pipefail
  BOOTC_TEMPDIR=$(mktemp -d)
  trap 'rm -rf -- "$BOOTC_TEMPDIR"' EXIT
  
@@ -11,7 +11,7 @@ index c4c884b..29df30c 100755
  # LBI only enabled for test-22-logically-bound-install
  LBI="${LBI:-disabled}"
  
-@@ -16,6 +18,28 @@ case "$ID" in
+@@ -21,6 +23,28 @@ case "$ID" in
      "fedora")
          TIER1_IMAGE_URL="${TIER1_IMAGE_URL:-quay.io/fedora/fedora-bootc:${VERSION_ID}}"
          ;;
@@ -32,7 +32,7 @@ index c4c884b..29df30c 100755
 +        fi
 +
 +        # use latest compose if specific compose is not accessible
-+        RC=$(curl -skIw '%{http_code}' -o /dev/null "http://download.eng.bos.redhat.com/rhel-${VERSION_ID%%.*}/nightly/${BATCH_COMPOSE}RHEL-${VERSION_ID%%.*}/${CURRENT_COMPOSE_ID}/STATUS")
++        RC=$(curl -skIw '%{http_code}' -o /dev/null "http://download.devel.redhat.com/rhel-${VERSION_ID%%.*}/nightly/${BATCH_COMPOSE}RHEL-${VERSION_ID%%.*}/${CURRENT_COMPOSE_ID}/STATUS")
 +        if [[ $RC != "200" ]]; then
 +            CURRENT_COMPOSE_ID=latest-RHEL-${VERSION_ID%%}
 +        fi
@@ -40,7 +40,7 @@ index c4c884b..29df30c 100755
  esac
  
  if [ "$TMT_REBOOT_COUNT" -eq 0 ]; then
-@@ -93,6 +117,22 @@ COMMONEOF
+@@ -98,7 +122,26 @@ COMMONEOF
          tee "$FEDORA_CI_CONTAINERFILE" > /dev/null << FEDORACIEOF
  FROM $TIER1_IMAGE_URL
  
@@ -48,18 +48,22 @@ index c4c884b..29df30c 100755
 +tee "/etc/yum.repos.d/rhel.repo" >/dev/null <<RHELREPOEOF
 +[rhel-baseos]
 +name=baseos
-+baseurl=http://download.eng.bos.redhat.com/rhel-${VERSION_ID%%.*}/nightly/${BATCH_COMPOSE}RHEL-${VERSION_ID%%.*}/${CURRENT_COMPOSE_ID}/compose/BaseOS/${ARCH}/os/
++baseurl=http://download.devel.redhat.com/rhel-${VERSION_ID%%.*}/nightly/${BATCH_COMPOSE}RHEL-${VERSION_ID%%.*}/${CURRENT_COMPOSE_ID}/compose/BaseOS/${ARCH}/os/
 +enabled=1
 +gpgcheck=0
 +
 +[rhel-appstream]
 +name=appstream
-+baseurl=http://download.eng.bos.redhat.com/rhel-${VERSION_ID%%.*}/nightly/${BATCH_COMPOSE}RHEL-${VERSION_ID%%.*}/${CURRENT_COMPOSE_ID}/compose/AppStream/${ARCH}/os/
++baseurl=http://download.devel.redhat.com/rhel-${VERSION_ID%%.*}/nightly/${BATCH_COMPOSE}RHEL-${VERSION_ID%%.*}/${CURRENT_COMPOSE_ID}/compose/AppStream/${ARCH}/os/
 +enabled=1
 +gpgcheck=0
 +RHELREPOEOF
 +REPORUN
 +
  RUN dnf -y upgrade /rpms/*.rpm
++
++# Required by tmt avc checking after test
++RUN dnf -y install audit
  FEDORACIEOF
          cat >"$CONTAINERFILE" <<REALEOF
+ $(cat "$FEDORA_CI_CONTAINERFILE")
