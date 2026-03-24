@@ -13,7 +13,7 @@
 
 Name:           bootc
 Version:        1.8.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Bootable container system
 
 # Apache-2.0
@@ -33,6 +33,7 @@ Source1:        %{url}/releases/download/v%{version}/bootc-%{version}-vendor.tar
 # Patch for integration test RHEL 9.x and 10.x support
 Patch0: 0000-bootc-inistall-provision.patch
 Patch1: 0001-bootc-inistall-provision.patch
+Patch2: 0001-install-Backport-PR-1752-add-target_root_path-for-Ro.patch
 
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch:    %{ix86}
@@ -153,6 +154,10 @@ chmod +x %{?buildroot}/%{system_reinstall_bootc_install_podman_path}
 %{system_reinstall_bootc_install_podman_path}
 
 %changelog
+* Fri Jan 23 2026 Joseph Marrero <jmarrero@fedoraproject.org> - 1.8.0-4
+- Backport https://github.com/bootc-dev/bootc/pull/1752
+  Resolves: #RHEL-143203
+
 * Wed Sep 10 2025 Joseph Marrero <jmarrero@fedoraproject.org> - 1.8.0-3
 - Bump release as rhpkg needed an update to tag for 9.7.z
   Resolves: #RHEL-113361
