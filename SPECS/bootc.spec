@@ -23,7 +23,7 @@
 
 Name:           bootc
 Version:        1.16.4
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Bootable container system
 
 # Apache-2.0
@@ -38,6 +38,9 @@ License:        Apache-2.0 AND BSD-3-Clause AND MIT AND (Apache-2.0 OR BSL-1.0) 
 URL:            https://github.com/bootc-dev/bootc
 Source0:        %{url}/releases/download/v%{version}/bootc-%{version}.tar.zstd
 Source1:        %{url}/releases/download/v%{version}/bootc-%{version}-vendor.tar.zstd
+
+# Backport https://github.com/bootc-dev/bootc/pull/2485
+Patch0:         0001-cli-Make-loader-entries-unavailable-when-ostree-lack.patch
 
 # Mark the tmt AVC check as informational; bootc probes for mac_admin
 # capability via chcon with an intentionally invalid label, which
@@ -217,6 +220,10 @@ fi
 %endif
 
 %changelog
+* Wed Sep 23 2026 Joseph Marrero Corchado <jmarrero@redhat.com> - 1.16.4-2
+- Make loader-entries unavailable when ostree lacks bootconfig-extra
+- Resolves: RHEL-267536
+
 * Wed Jul 22 2026 Chris Kyrouac <ckyrouac@redhat.com> - 1.16.4-1
 - Update to 1.16.4
 - Resolves: #RHEL-213807
