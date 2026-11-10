@@ -22,8 +22,9 @@
 %endif
 
 Name:           bootc
-Version:        1.16.4
-Release:        2%{?dist}
+# Ensure this local build overrides anything else.
+Version:        1.16.9
+Release:        1%{?dist}
 Summary:        Bootable container system
 
 # Apache-2.0
@@ -38,13 +39,6 @@ License:        Apache-2.0 AND BSD-3-Clause AND MIT AND (Apache-2.0 OR BSL-1.0) 
 URL:            https://github.com/bootc-dev/bootc
 Source0:        %{url}/releases/download/v%{version}/bootc-%{version}.tar.zstd
 Source1:        %{url}/releases/download/v%{version}/bootc-%{version}-vendor.tar.zstd
-
-# Backport https://github.com/bootc-dev/bootc/pull/2485
-Patch0:         0001-cli-Make-loader-entries-unavailable-when-ostree-lack.patch
-
-# Mark the tmt AVC check as informational; bootc probes for mac_admin
-# capability via chcon with an intentionally invalid label, which
-# generates expected AVC denials (crates/lib/src/lsm.rs test_install_t).
 
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch:    %{ix86}
@@ -118,8 +112,13 @@ cat vendor-config.toml >> .cargo/config.toml
 rm vendor-config.toml
 %else
 # Container build: source already at _builddir (/src), nothing to extract
-# RPM's %mkbuilddir creates a subdirectory; symlink it back to the source
+# RPM's %mkbuilddir creates a subdirectory; symlink it back to the source.
+# F45+ RPM also creates rpmbuild.env in the subdir that %build will source,
+# so preserve it before replacing the directory with a symlink.
 cd ..
+if [ -f %{name}-%{version}-build/rpmbuild.env ]; then
+    mv %{name}-%{version}-build/rpmbuild.env .
+fi
 rm -rf %{name}-%{version}-build
 ln -s . %{name}-%{version}-build
 cd %{name}-%{version}-build
@@ -220,13 +219,35 @@ fi
 %endif
 
 %changelog
-* Wed Sep 23 2026 Joseph Marrero Corchado <jmarrero@redhat.com> - 1.16.4-2
-- Make loader-entries unavailable when ostree lacks bootconfig-extra
-- Resolves: RHEL-267536
+* Fri Aug 21 2026 imagebuilder-bot <imagebuilder-bots+imagebuilder-bot@redhat.com> - 1.16.9-1
+- New upstream release
 
-* Wed Jul 22 2026 Chris Kyrouac <ckyrouac@redhat.com> - 1.16.4-1
-- Update to 1.16.4
-- Resolves: #RHEL-213807
+* Thu Aug 20 2026 imagebuilder-bot <imagebuilder-bots+imagebuilder-bot@redhat.com> - 1.16.8-1
+- New upstream release
+
+* Tue Aug 04 2026 imagebuilder-bot <imagebuilder-bots+imagebuilder-bot@redhat.com> - 1.16.7-1
+- New upstream release
+
+* Tue Jul 28 2026 imagebuilder-bot <imagebuilder-bots+imagebuilder-bot@redhat.com> - 1.16.6-1
+- New upstream release
+
+* Mon Jul 27 2026 imagebuilder-bot <imagebuilder-bots+imagebuilder-bot@redhat.com> - 1.16.5-1
+- New upstream release
+
+* Wed Jun 24 2026 Joseph Marrero <jmarrero@fedoraproject.org> - 1.16.2-1
+- Update to 1.16.2
+- https://github.com/bootc-dev/bootc/releases/tag/v1.16.2
+- Resolves: #RHEL-156438
+
+* Fri May 01 2026 Joseph Marrero <jmarrero@fedoraproject.org> - 1.15.2-1
+- Update to 1.15.2
+- https://github.com/bootc-dev/bootc/releases/tag/v1.15.2
+- Resolves: #RHEL-172417
+
+* Tue Apr 14 2026 Joseph Marrero <jmarrero@fedoraproject.org> - 1.15.1-1
+- Update to 1.15.1
+- https://github.com/bootc-dev/bootc/releases/tag/v1.15.1
+- Resolves: #RHEL-168117
 
 * Mon Feb 24 2026 Colin Walters <walters@verbum.org> - 1.13.0-1
 - Update to 1.13.0
